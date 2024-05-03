@@ -14,7 +14,7 @@ jobs:
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Docker Image
-        run: docker build -t zrwhits/iws-server .
+        run: docker build -t zrwhits/iws-server  .
       - name: Publish Image to docker hub
         run: docker push zrwhits/iws-server:latest
 
