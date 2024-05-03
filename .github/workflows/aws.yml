@@ -25,6 +25,6 @@ jobs:
       - name: Pull Image from docker hub
         run: docker pull zrwhits/iws-server:latest
       - name: Delete old docker container
-        run: docker rm -f iws-client
+        run: docker rm -f iws-server
       - name: Run Docker Container 
         run: docker run -d -p 3000:3000 --name server-app-container -e MONGO_PASSWORD='${{ secrets.PASSWORD }}' zrwhits/iws-server
