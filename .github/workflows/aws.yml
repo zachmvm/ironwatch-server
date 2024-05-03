@@ -1,0 +1,28 @@
+
+name: Deploy to Amazon ECS
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout/@v4
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker Image
+        run: docker build -t zrwhits/iws-server .
+      - name: Publish Image to docker hub
+        run: docker push zrwhits/iws-server:latest
+
+  deploy: 
+    needs: build
+    runs-on: self-hosted 
+    steps: 
+      - name: Pull Image from docker hub
+        run: docker pull zrwhits/iws-server:latest
+      - name: Run Docker Container 
+        run: docker run -d -p 3000:3000 --name server-app-container -e MONGO_PASSWORD='${{ secrets.PASSWORD }}' zrwhits/iws-server
